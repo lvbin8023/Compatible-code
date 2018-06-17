@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<input type="button" value="按钮事件" id="btn">
+<input type="button" value="解绑第一个按钮事件" id="btn2">
+<script>
+    //获取id函数
+    function my$(id) {
+        return document.getElementById(id);
+    }
+
+    //绑定事件兼容代码
+    //为任意的一个元素，绑定对应的事件
+    function addEventListener(element, type, fn) {
+        if (element.addEventListener) {
+            element.addEventListener(type, fn, false);
+        } else if (element.attachEvent) {
+            element.attachEvent("on" + type, fn);
+        } else {
+            element["on" + type] = fn;
+        }
+    }
+
+    //解绑事件的兼容代码
+    //为任意的一个元素，解绑对应的事件
+    function removeEventListener(element, type, fnName) {
+        if (element.removeEventListener) {
+            element.removeEventListener(type, fnName, false);
+        } else if (element.detachEvent) {
+            element.detachEvent("on" + type, fnName);
+        } else {
+            element["on" + type] = null;
+        }
+    }
+
+    //测试代码
+    function f1() {
+        console.log("第一个");
+    }
+
+    function f2() {
+        console.log("第二个");
+    }
+
+    //绑定事件
+    addEventListener(my$("btn"), "click", f1);
+    addEventListener(my$("btn"), "click", f2);
+
+    //解绑事件
+    my$("btn2").onclick = function () {
+        removeEventListener(my$("btn"), "click", f1);
+    }
+
+</script>
+</body>
+</html>
